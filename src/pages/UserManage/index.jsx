@@ -8,11 +8,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import { deleteUser, getAllUsers } from '../../core/services/user';
-import { Delete } from '@mui/icons-material';
+import { deleteUser, getAllUsers, updateUser } from '../../core/services/user';
+import { Delete, Edit } from '@mui/icons-material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 
 export const UserManage = () => {
     const [users, setUsers] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     React.useEffect(() => {
         loadUsers();
     }, []);
@@ -36,6 +46,26 @@ export const UserManage = () => {
             })
     }
 
+    const [selectedUser, setSelectedUser] = React.useState(null);
+    const [updateData, setUpdateData] = React.useState({
+        id: selectedUser,
+        username: '',
+        email: '',
+        photo: ''
+    });
+    const handleUpdate = () => {
+        updateUser(selectedUser, updateData)
+            .then(() => {
+                loadUsers();
+                alert('Successfully update!');
+                setOpen(false);
+            })
+            .catch(() => {
+                alert('Fail to update!');
+                setOpen(false);
+            })
+    }
+
     return (
         <>
             <TableContainer
@@ -50,6 +80,7 @@ export const UserManage = () => {
                             <TableCell style={{ fontWeight: 'bold' }} align="right">Name</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }} align="right">EMAIL</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }} align="right">Thumbnail URL</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }} align="right">Edit</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }} align="right">Delete</TableCell>
                         </TableRow>
                     </TableHead>
@@ -68,6 +99,21 @@ export const UserManage = () => {
                                 <TableCell
                                     style={{ cursor: 'pointer' }}
                                     align="center"
+                                    onClick={() => {
+                                        setSelectedUser(user.id);
+
+                                        setUpdateData({
+                                            ...user
+                                        })
+
+                                        setOpen(true);
+                                    }}
+                                >
+                                    <Edit />
+                                </TableCell>
+                                <TableCell
+                                    style={{ cursor: 'pointer' }}
+                                    align="center"
                                     onClick={() => handleDelete(user.id)}
                                 >
                                     <Delete />
@@ -77,6 +123,46 @@ export const UserManage = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Update User Information</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Name"
+                        type="text"
+                        fullWidth
+                        defaultValue={updateData.username}
+                        onChange={(e) => {
+                            setUpdateData({
+                                ...updateData,
+                                username: e.target.value
+                            })
+                        }}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Thumbnail URL"
+                        type="text"
+                        fullWidth
+                        defaultValue={updateData.photo}
+                        onChange={(e) => {
+                            setUpdateData({
+                                ...updateData,
+                                photo: e.target.value
+                            })
+                        }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleUpdate}>Update</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 

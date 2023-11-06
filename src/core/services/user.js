@@ -14,3 +14,8 @@ export const deleteUser = async (userId) => {
     const res = await axios.delete(`https://65444ee25a0b4b04436c3f2c.mockapi.io/users/${userId}`);
     return res.data;
 }
+
+export const updateUser = async (userId, data) => {
+    const res = await axios.put(`https://65444ee25a0b4b04436c3f2c.mockapi.io/users/${userId}`, data);
+    return res.data;
+}
