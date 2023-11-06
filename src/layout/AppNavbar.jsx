@@ -118,18 +118,27 @@ export const AppNavbar = () => {
                             }
                             {
                                 currentUser &&
-                                <MenuItem
-                                    style={{
-                                        borderRadius: '10px'
-                                    }}
-                                    onClick={() => {
-                                        signOut(auth)
-                                            .then((res) => {
-                                                navigate('/login')
-                                            })
-                                    }}>
-                                    <Link style={{ textDecoration: 'none', color: '#0A0A0A' }}><Typography textAlign="center">Logout</Typography></Link>
-                                </MenuItem>
+                                <>
+                                    <MenuItem
+                                        style={{
+                                            borderRadius: '10px'
+                                        }}
+                                        onClick={() => navigate('user')}>
+                                        <Link style={{ textDecoration: 'none', color: '#0A0A0A' }}><Typography textAlign="center">User Manage</Typography></Link>
+                                    </MenuItem>
+                                    <MenuItem
+                                        style={{
+                                            borderRadius: '10px'
+                                        }}
+                                        onClick={() => {
+                                            signOut(auth)
+                                                .then((res) => {
+                                                    navigate('/login')
+                                                })
+                                        }}>
+                                        <Link style={{ textDecoration: 'none', color: '#0A0A0A' }}><Typography textAlign="center">Logout</Typography></Link>
+                                    </MenuItem>
+                                </>
                             }
                         </Menu>
                     </Box>
@@ -146,17 +155,26 @@ export const AppNavbar = () => {
                         ))}
                         {
                             currentUser &&
-                            <Button
-                                onClick={() => {
-                                    signOut(auth)
-                                        .then((res) => {
-                                            navigate('/login')
-                                        })
-                                }}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                Logout
-                            </Button>
+                            <>
+                                <Button
+                                    onClick={() => navigate('/user')}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    User Manage
+                                </Button>
+
+                                <Button
+                                    onClick={() => {
+                                        signOut(auth)
+                                            .then((res) => {
+                                                navigate('/login')
+                                            })
+                                    }}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    Logout
+                                </Button>
+                            </>
                         }
                         {
                             !currentUser &&

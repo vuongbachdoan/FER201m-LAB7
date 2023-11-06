@@ -10,6 +10,7 @@ import { FlowerAdd } from '../pages/Dashboard/components/FlowerAdd';
 import { Login } from '../pages/Login';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../core/config/firebase';
+import { UserManage } from '../pages/UserManage';
 
 export const UserContext = React.createContext();
 export const AppRouting = () => {
@@ -33,6 +34,7 @@ export const AppRouting = () => {
                     <Route path='/add' element={<FlowerAdd />} />
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/contact' element={<Contact />} />
+                    <Route path='/user' element={<UserManage />} />
                 </Route>
                 {/* <Route path='*' element={<Error />} /> */}
             </Routes>
