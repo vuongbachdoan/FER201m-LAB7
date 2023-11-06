@@ -17,8 +17,12 @@ export const AppRouting = () => {
     const [user, setUser] = React.useState(null);
     React.useEffect(() => {
         onAuthStateChanged(auth, user => {
-            if(!user) {
+            if (!user) {
                 setUser(null);
+                localStorage.removeItem('user');
+            } else {
+                setUser(user);
+                localStorage.setItem('user', JSON.stringify(user));
             }
         });
     }, []);

@@ -8,17 +8,33 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import { getAllUsers } from '../../core/services/user';
+import { deleteUser, getAllUsers } from '../../core/services/user';
+import { Delete } from '@mui/icons-material';
 
 export const UserManage = () => {
     const [users, setUsers] = React.useState([]);
     React.useEffect(() => {
+        loadUsers();
+    }, []);
+
+    const loadUsers = () => {
         getAllUsers()
             .then((res) => {
                 setUsers(res);
             })
             .catch((err) => console.error(err));
-    }, [])
+    }
+
+    const handleDelete = (userId) => {
+        deleteUser(userId)
+            .then(() => {
+                alert('Delete successfully!');
+                loadUsers();
+            })
+            .catch(() => {
+                alert('Fail to delete!');
+            })
+    }
 
     return (
         <>
@@ -34,6 +50,7 @@ export const UserManage = () => {
                             <TableCell style={{ fontWeight: 'bold' }} align="right">Name</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }} align="right">EMAIL</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }} align="right">Thumbnail URL</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }} align="right">Delete</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,6 +65,13 @@ export const UserManage = () => {
                                 <TableCell align="right">{user.username}</TableCell>
                                 <TableCell align="right">{user.email}</TableCell>
                                 <TableCell align="right">{user.photo}</TableCell>
+                                <TableCell
+                                    style={{ cursor: 'pointer' }}
+                                    align="center"
+                                    onClick={() => handleDelete(user.id)}
+                                >
+                                    <Delete />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
